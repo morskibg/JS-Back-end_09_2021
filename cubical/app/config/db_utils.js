@@ -17,6 +17,23 @@ function getAllCubics(){
     return db 
 }
 
+function getCubeById(id){   
+    return db.filter(x => x.id === +id)[0];
+}
+
+function isContain(currCube, searchSubstring, from = '', to = ''){
+    const lowerdSub = searchSubstring.toLowerCase()  
+    if(from === '' && to === ''){
+        return Object.values(currCube).slice(1,-1)        
+            .some(y => y.toLowerCase().includes(lowerdSub));
+    }
+    from = from === '' ? 1 : from;
+    to = to === '' ? difficultyLevels.length : to;
+
+    return  Object.values(currCube).some(y => y.toLowerCase().includes(lowerdSub) $$ );
+
+}
+
 function purgeDb(){
     fs.writeFile(path.join(process.cwd(), 'config' ,"database.json"),JSON.stringify([]), function(err){
         if(err){console.log(err); rerurn;}
@@ -39,7 +56,9 @@ const toExport = {
     difficultyLevels,
     purgeDb,
     getAllCubics,
+    getCubeById,
     create,
+    isContain
 }
 
 module.exports = toExport

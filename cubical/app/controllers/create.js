@@ -1,16 +1,16 @@
-const dbUtils = require('../config/db_utils')
-const router = require('express').Router()
+const dbUtils = require('../config/db_utils');
+const router = require('express').Router();
 
 
 
 let diffLevelsObjArr = Object.entries(dbUtils.difficultyLevels).reduce((accum, currItem) =>{        
     accum.push({'id':currItem[0], 'level':currItem[1]});
-    return accum
+    return accum;
 },[]);
 
 router.all('/purge_db',(req, res) =>{
-    dbUtils.purgeDb()
-    res.redirect('/')
+    dbUtils.purgeDb();
+    res.redirect('/');
 });
 
 // router.use('/',(req, res, next) =>{
@@ -24,7 +24,7 @@ router.all('/purge_db',(req, res) =>{
 // });
 
 router.get('/',(req, res) =>{
-    payLoad = {
+    const payLoad = {
         title:'Create',
         diffLevels:diffLevelsObjArr, 
     };
@@ -33,7 +33,7 @@ router.get('/',(req, res) =>{
 
 router.post('/',(req, res) =>{
     console.log(req.body.difficultyLevel);
-    dbUtils.create(req.body.name, req.body.description, req.body.imageUrl, req.body.difficultyLevel)
+    dbUtils.create(req.body.name, req.body.description, req.body.imageUrl, req.body.difficultyLevel);
     
     res.redirect('/');
 });
