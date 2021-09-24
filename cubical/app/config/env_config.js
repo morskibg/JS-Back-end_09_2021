@@ -1,7 +1,8 @@
+require('dotenv').config()
+
 const config = {
     development: {
-        port: process.env.PORT || 8080  
-
+        port: process.env.PORT || 3000
     },
     production: {}
 };

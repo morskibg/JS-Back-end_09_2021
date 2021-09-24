@@ -19,11 +19,10 @@ router.post('/',(req, res) =>{
     const searchWord = req.body.search;
     const from = req.body.from;
     const to = req.body.to;
-    const filteredCubesByWord = allCubes.filter(x => dbUtils.isContain(x, searchWord))
+    // const filteredCubesByWord = allCubes.filter(x => dbUtils.isContain(x, searchWord))
      
-    const filteredCubes = from === '' && to === '' ? 
-        allCubes.filter(x => dbUtils.isContain(x, r)) : 
-        ;  
+    const filteredCubes = allCubes.filter(x => dbUtils.isContain(x, searchWord, from, to));
+        
     const payLoad = {
         title:'Browser',
         cubes:filteredCubes,

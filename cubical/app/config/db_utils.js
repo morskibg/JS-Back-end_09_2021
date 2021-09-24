@@ -22,16 +22,41 @@ function getCubeById(id){
 }
 
 function isContain(currCube, searchSubstring, from = '', to = ''){
-    const lowerdSub = searchSubstring.toLowerCase()  
-    if(from === '' && to === ''){
-        return Object.values(currCube).slice(1,-1)        
-            .some(y => y.toLowerCase().includes(lowerdSub));
-    }
-    from = from === '' ? 1 : from;
-    to = to === '' ? difficultyLevels.length : to;
+    
+    try{
+        from = Number(from);
+    }catch{from = from};
+    try{
+        to = Number(to);
+    }catch{to = to};
+    
+    if(searchSubstring === ''){return true;}
+    const upperDiff = Object.values(difficultyLevels).length;    
+    const lowerdSub = searchSubstring.toLowerCase();
+   
+    if(!Number(from) && !Number(to)){
+        from = 1;
+        to = upperDiff;
+    }else if(!Number(from) || from < 1 || from > upperDiff ){                                                   // "from" is empty or outside the limits 
+                 
+        to = to >= 1 && to <= upperDiff ? to : to < 1 ? 1 : to > upperDiff ? upperDiff : to;                    // adjusting "to" to be inside limits 
+        from = to ;
+    }else if(!Number(to) || to < 1 || to > upperDiff){              
+        from = from >= 1 && from <= upperDiff ? from : from < 1 ? 1 : from > upperDiff ? upperDiff : from;
+        to = from ;
+    }else if(from > to){
+        to = from ;
+    }; 
+    const booleanToReturn = Object.values(currCube).slice(1).reduce((accum, currItem, index) =>{
+        if(index < 3){            
+            accum = currItem.toLowerCase().includes(lowerdSub) || accum;                   
+        }else{
+            accum = currItem >= from && currItem <= to && accum;          
+        } 
+        return accum;
+    },false);
 
-    return  Object.values(currCube).some(y => y.toLowerCase().includes(lowerdSub) $$ );
-
+    return  booleanToReturn;
 }
 
 function purgeDb(){
