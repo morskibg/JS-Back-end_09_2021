@@ -72,7 +72,7 @@ function create(name, description, imageUrl, difficultyLevel){
     currCubic = new models.Cubic(id, name, description, imageUrl, +difficultyLevel);
     
     allCubics.push(currCubic)
-    fs.writeFile(path.join(process.cwd(), 'config' ,"database.json"),JSON.stringify(allCubics),"utf-8", function(err){
+    fs.writeFile(path.join(process.cwd(), 'config' ,"database.json"),JSON.stringify(allCubics, null, 2),"utf-8", function(err){
         if(err){console.log(err); rerurn;}
     });
 };
