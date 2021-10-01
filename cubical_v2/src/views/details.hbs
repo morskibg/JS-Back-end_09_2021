@@ -1,0 +1,19 @@
+
+<h1>{{currCube.name}}</h1>
+<img class="cube" src="{{currCube.imageUrl}}">
+<div class="details">
+  <p><span>Description:</span>{{currCube.description}}</p>
+  <p><span>Difficulty level:</span>{{currCube.difficultyLevel}}</p>
+  <a class="btn" href="/">Back</a>
+  <a class="btn" href="/cube/attach/{{currCube._id}}">Attach Stickers</a>
+</div>
+<h2>Accessories</h2>
+<div class="accessories">
+{{#each currCube.accessories}}
+  <div class="accessory">
+  {{> accessory}}
+  </div>
+{{else}}
+    <h3 class="italic">This cube has no accessories yet...</h3>
+{{/each}}
+</div>
