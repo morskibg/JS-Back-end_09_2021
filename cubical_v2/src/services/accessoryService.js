@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 const Accessory = require('../models/Accessory');
 
 function addAccessory(name, description, imageUrl) {
@@ -9,24 +10,32 @@ function addAccessory(name, description, imageUrl) {
 
 const getAccessoryById = (id) => Accessory.findById(id).lean();
 
-const getAllAccessories = () => Accessory.find({}).lean();
-// const getAllAccessoriesByCubeId = (cubeId) => Accessory.find({}).lean();
+const getAvailableAccessories = (cubeAccesoriesIds) => Accessory
+	.find({ _id: { $nin: cubeAccesoriesIds } })
+	.lean();
+// const getAvailableAccessories = (cubeId) => Accessory.find().where('cubes').equals([]).lean();
 
 async function attachCubeToAccessory(cubeId, accessoryId) {
-	Accessory.findById(accessoryId)
-		.then((accessory) => {
-			if (!accessory.cubes.includes(cubeId)) {
-				accessory.cubes.push(cubeId);
-			}
-			return accessory.save();
-		})
-		.catch((err) => console.log(err));
+	const accessory = await Accessory.findById(accessoryId);
+	if (!accessory.cubes.includes(cubeId)) {
+		accessory.cubes.push(cubeId);
+		accessory.save();
+		console.log('ffffffffffffff');
+	}
+	// Accessory.findById(accessoryId)
+	// 	.then((accessory) => {
+	// 		if (!accessory.cubes.includes(cubeId)) {
+	// 			accessory.cubes.push(cubeId);
+	// 			accessory.save();
+	// 		}
+	// 	})
+	// 	.catch((err) => console.log(err));
 }
 
 const services = {
 	addAccessory,
 	getAccessoryById,
-	getAllAccessories,
+	getAvailableAccessories,
 	attachCubeToAccessory,
 };
 module.exports = services;

@@ -1,4 +1,5 @@
 const Cube = require('../models/Cube');
+const User = require('../models/User');
 
 async function getAll(query) {
 	let cube = await Cube.find({}).lean();
@@ -24,28 +25,60 @@ async function getAll(query) {
 
 const getCubeById = (id) => Cube.findById(id).populate('accessories').lean();
 
-function addCube(name, description, imageUrl, difficultyLevel) {
-	const newCube = new Cube({
+async function updateCubeById(id, cubeData) {
+	const {
 		name, description, imageUrl, difficultyLevel,
+	} = cubeData;
+	await Cube.findOneAndUpdate({ _id: id }, {
+		name, description, imageUrl, difficultyLevel,
+	});
+}
+
+async function deleteCubeById(id) {
+	await Cube.findOneAndDelete({ _id: id });
+}
+
+async function addCube(name, description, imageUrl, difficultyLevel, creatorId) {
+	const creator = await User.findById(creatorId);
+	const newCube = new Cube({
+		name, description, imageUrl, difficultyLevel, creator, creatorId,
 	});
 	return newCube.save();
 }
+
+// function addCube(name, description, imageUrl, difficultyLevel, creatorId) {
+// 	User.findById(creatorId)
+// 		.then((creator) => {
+// 			const newCube = new Cube({
+// 				name, description, imageUrl, difficultyLevel, creator, creatorId,
+// 			});
+// 			return newCube.save();
+// 		});
+// }
 
 async function attachAccessoryToCube(cubeId, accessoryId) {
 	Cube.findById(cubeId)
 		.then((cube) => {
 			if (!cube.accessories.includes(accessoryId)) {
 				cube.accessories.push(accessoryId);
+				cube.save();
+				console.log('ccccccccccccc');
 			}
-			return cube.save();
 		})
 		.catch((err) => console.log(err));
 }
+
+// async function isCreator(userId, cubeId) {
+// 	const currCube = await Cube.findById(cubeId);
+// 	return currCube.creatorId === userId;
+// }
 
 const services = {
 	getAll,
 	addCube,
 	getCubeById,
 	attachAccessoryToCube,
+	updateCubeById,
+	deleteCubeById,
 };
 module.exports = services;

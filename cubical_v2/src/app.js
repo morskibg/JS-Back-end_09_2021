@@ -1,7 +1,7 @@
 global.basedir = __dirname;
-const env = process.env.NODE_ENV || 'development';
+// const env = process.env.NODE_ENV || 'development';
 const app = require('express')();
-const config = require('./config/config')[env];
+const config = require('./config/config');
 
 require('./config/express')(app);
 require('./config/routes')(app);

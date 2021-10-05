@@ -18,7 +18,6 @@ const accessorySchema = new mongoose.Schema({
 		required: [true, 'Image URL is required!'],
 		match: /^https?/,
 	},
-	cubes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cube' }],
 });
 
 module.exports = mongoose.model('Accessory', accessorySchema);

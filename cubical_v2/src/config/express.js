@@ -1,6 +1,9 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+const authMiddleware = require('../middlewares/auth');
+const sniffer = require('../middlewares/sniffer');
 
 const expressInit = function (app) {
 	app.engine(
@@ -19,6 +22,10 @@ const expressInit = function (app) {
 	app.use(express.urlencoded({ extended: true }));
 
 	app.use(express.static(path.join(global.basedir, 'static')));
+
+	app.use(cookieParser());
+	app.use(authMiddleware());
+	// app.use(sniffer());
 };
 module.exports = expressInit;
 
