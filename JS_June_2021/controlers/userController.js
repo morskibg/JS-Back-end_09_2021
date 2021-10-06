@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { body, validationResult } = require('express-validator');
 const userService = require('../services/userServices');
 const { cookieName } = require('../config/config');
 
@@ -9,13 +10,16 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', async (req, res, next) => {
-	// try {
-	await userService.addUser(req.body);	
-	res.redirect('/')	
-	// } catch (error) {
-	// 	next(error);
-	// 	res.redirect('/');	
-	// }
+	try {
+		await userService.addUser(req.body);	
+		res.redirect('/')	
+	} catch (err) {
+
+		// next(err);
+		const error = Object.keys(err?.errors).map(x => ({ message: err.errors[x].properties.message}));
+		res.render('register', { error });
+
+	}
 });
 
 router.get('/login', (req, res) => {
