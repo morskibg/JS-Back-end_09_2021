@@ -6,7 +6,7 @@
 	"configurations": [
 
 		{
-			"command": "cd JS_June_2021&&npm start",
+			"command": "cd exam_prep1&&npm start",
 			"name": "Run npm start",
 			"request": "launch",
 			"type": "node-terminal"
