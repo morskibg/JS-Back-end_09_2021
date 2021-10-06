@@ -2,6 +2,7 @@ const express = require('express');
 const handlebars = require('express-handlebars');
 const path = require('path');
 
+
 const expressInit = function (app) {
 	app.engine(
 		'.hbs',
@@ -19,6 +20,8 @@ const expressInit = function (app) {
 	app.use(express.urlencoded({ extended: true }));
 
 	app.use(express.static(path.join(global.basedir, 'static')));
+
+	
 
 	// app.use(cookieParser());
 	// app.use(authMiddleware());

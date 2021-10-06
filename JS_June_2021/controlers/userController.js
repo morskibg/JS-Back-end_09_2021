@@ -8,14 +8,14 @@ router.get('/register', (req, res) => {
 
 });
 
-router.post('/register', async (req, res) => {
-	try {
-		await userService.addUser(req.body);	
-		res.redirect('/')	
-	} catch (error) {
-		console.log(error);
-		res.redirect('/')	
-	}
+router.post('/register', async (req, res, next) => {
+	// try {
+	await userService.addUser(req.body);	
+	res.redirect('/')	
+	// } catch (error) {
+	// 	next(error);
+	// 	res.redirect('/');	
+	// }
 });
 
 router.get('/login', (req, res) => {
