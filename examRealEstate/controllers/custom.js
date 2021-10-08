@@ -2,7 +2,7 @@ const router = require("express").Router()
 const { usersOnly, ownerOnly, notOwnerOnly } = require("../middlewares/routeGuards")
 const { body, validationResult } = require("express-validator")
 const custom = require("../db/services/custom")
-const { createErrorMsg } = require("../helpers/helper")
+const { createErrorMsg, createErrorFromModel} = require("../helpers/helper")
 
 router.get('/', async (req, res) => {
 	const customs = await req.dbServices.custom.getAll()
@@ -115,9 +115,7 @@ router.post(
 	ownerOnly,
 	body('name')
 		.escape()
-		.trim()
-		.isLength({ min: 6 })
-		.withMessage('Name must be at least 6 symbols long.'),
+		.trim(),
 	body('type')
 		.escape()
 		.trim()
@@ -151,9 +149,15 @@ router.post(
 				description: req.body.description,
 				availablePieces: req.body.availablePieces,
 			}
-			await req.dbServices.custom.updateById(req.params.id, updatedPlay)
+			try {
+				await req.dbServices.custom.updateById(req.params.id, updatedPlay);				
+			} catch (error) {
+        
+				res.locals.errors = createErrorFromModel(error);
+				res.render("edit", req.body)
+			}
 
-			res.redirect(`/home/details/${req.params.id}`)
+			// res.redirect(`/home/details/${req.params.id}`)
 		} else {
 			res.locals.errors = createErrorMsg(errors)
 
