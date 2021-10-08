@@ -5,6 +5,7 @@ const { TOKEN_SECRET, COOKIE_NAME } = require("../config/variables.js")
 const { guestsOnly, usersOnly, ownerOnly } = require("../middlewares/routeGuards.js")
 const { body, validationResult } = require("express-validator")
 const { createErrorMsg } = require('../helpers/helper')
+const { trips } = require("../db/services/user.js")
 
 const register = async (req, res, next) => {
 	const errors = validationResult(req)
@@ -32,9 +33,12 @@ const login = async (req, res) => {
 	const errors = validationResult(req)
 
 	if (errors.isEmpty()) {
-		const user = await req.dbServices.user.getByEmail(req.body.email)
-
-		if (bcrypt.compare(req.body.password, user.password)) {
+		try {
+			const user = await req.dbServices.user.getByEmail(req.body.email)
+			if (!user) throw new Error('Wrong user or password ! <br />');
+			const isCorrectPassword = await bcrypt.compare(req.body.password, user.password);
+			if (!isCorrectPassword) throw new Error('Wrong user or password ! <br />');
+			
 			const token = jwt.sign(
 				{
 					_id: user._id,
@@ -44,9 +48,14 @@ const login = async (req, res) => {
 			)
 			res.cookie(COOKIE_NAME, token, { httpOnly: true })
 			res.redirect("/")
+			
+		} catch (error) {
+			res.locals.errors = error;
+			res.render("login", req.body)
 		}
+		
 	} else {
-		res.locals.errors = res.locals.errors = createErrorMsg(errors)
+		res.locals.errors = createErrorMsg(errors)
 
 		res.render("login", req.body)
 	}
@@ -81,17 +90,17 @@ router.get("/logout", usersOnly, (req, res) => {
 })
 
 //profile
-// router.get('/profile', async (req, res) => {
-// 	const user = await req.dbServices.user.getByIdPopulated(req.user._id)
-// 	const total = user.offersBought.reduce((a, v) => a + v.price, 0)
+router.get('/profile', async (req, res) => {
+	const user = await req.dbServices.user.getByIdPopulated(req.user._id);
+	const trips = await req.dbServices.user.trips(req.user._id);
+	const context = {
+		trips,
+		tripsCount: trips.length,
+		isMale: user.gender === 'male' ,
+		user		
+	}
 
-// 	const context = {
-// 		customs: user.offersBought,
-// 		user,
-// 		total,
-// 	}
-
-// 	res.render('profile', context)
-// })
+	res.render('profile', context)
+})
 
 module.exports = router

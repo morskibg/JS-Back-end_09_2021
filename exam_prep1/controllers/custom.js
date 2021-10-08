@@ -6,7 +6,7 @@ const { createErrorMsg } = require("../helpers/helper")
 
 router.get("/", async (req, res) => {
 	const allTrips = await req.dbServices.custom.getAll() 
-	res.render("shared-trips", {allTrips})}
+	res.render("shared-trips", { allTrips })}
 );
 
 router.get("/create", usersOnly, (req, res) => res.render("trip-create"));
@@ -68,29 +68,76 @@ async (req, res) => {
 },
 )
 
-router.get("/:id", usersOnly, async (req, res) => {
+router.get("/:id", async (req, res) => {
 	const selectedTrip = await req.dbServices.custom.getByIdPopulated(req.params.id);
-
+	let isCreator = false;
+	let canJoin = false;
+	let isJoined = false;
+	let availableSeats = selectedTrip.seats - selectedTrip.buddies.length;
+	let buddiesStr = selectedTrip.buddies.map(x=>x.email).join(', ');
+	
+	if(req.user){
+		console.log('in loged USER');
+		isCreator = String(selectedTrip.creator._id) === String(req.user._id);    
+		isJoined = selectedTrip.buddies.some( x => String(x._id) === String(req.user._id));    
+		canJoin = !isJoined && String(selectedTrip.creator._id) !==  String(req.user._id) &&
+			availableSeats > 0
+	}
+	// console.log("🚀 ~ file: custom.js ~ line 80 ~ router.get ~ isCreator", isCreator)
+	// console.log("🚀 ~ file: custom.js ~ line 84 ~ router.get ~ req.user._id", req.user._id)
+	// console.log("🚀 ~ file: custom.js ~ line 85 ~ router.get ~ selectedTrip.buddies", selectedTrip.buddies)
+	// console.log("🚀 ~ file: custom.js ~ line 82 ~ router.get ~ isJoined", isJoined)
+	// console.log("🚀 ~ file: custom.js ~ line 83 ~ router.get ~ canJoin", canJoin)
+	// console.log("🚀 ~ file: custom.js ~ line 77 ~ router.get ~ availableSeats", availableSeats)
+	
   const payload = {...selectedTrip, 
-		hasAvalbSeat: selectedTrip.seats < 4,
-		isCreator: String(selectedTrip.creator._id) === String(req.user._id), 
-		availableSeats: 4 - selectedTrip.seats,
-		isJoined: selectedTrip.buddies.includes(req.user._id),
-		canJoin: !(selectedTrip.buddies.includes(req.user._id)) &&
-			 String(selectedTrip.creator._id) !==  String(req.user._id) &&
-			 selectedTrip.seats < 4
+		isCreator,
+		isJoined,
+		canJoin,
+		availableSeats,
+		buddiesStr
 	};
 	res.render("trip-details", payload); 
 });
 
-router.get("/:id/delete", ownerOnly, async (req, res) => {
+router.get("/:id/delete", usersOnly, ownerOnly, async (req, res) => {
 	await req.dbServices.custom.deleteById(req.params.id);
 	res.redirect('/custom')
 });
 
-router.get("/:id/edit", ownerOnly, async (req, res) => {
+router.get("/:id/edit", usersOnly, ownerOnly, async (req, res) => {
 	const selectedTrip = await req.dbServices.custom.getByIdPopulated(req.params.id);
+	
 	res.render('trip-edit', selectedTrip)
+});
+
+router.post("/:id/edit", usersOnly, ownerOnly, async (req, res) => {
+	// const selectedTrip = await req.dbServices.custom.getByIdPopulated(req.params.id);
+	const updatedTrip = {
+		startPoint: req.body.startPoint,
+		endPoint: req.body.endPoint,
+		date: req.body.date,
+		time: req.body.time,
+		carImage: req.body.carImage,
+		carBrand: req.body.carBrand,
+		seats: req.body.seats,
+		price: req.body.price,			
+		description: req.body.description,	};
+	
+	try {
+		await req.dbServices.custom.updateById(req.params.id, updatedTrip);	
+		res.redirect(`/custom/${req.params.id}`);	
+	} catch (error) {
+    console.log("🚀 ~ file: custom.js ~ line 129 ~ router.post ~ error", error)
+		res.locals.errors = error;
+		res.render("trip-edit", req.body)
+	}	
+});
+
+router.get("/:id/join", usersOnly, notOwnerOnly, async (req, res) => {
+	
+	await req.dbServices.custom.join(req.params.id, req.user);
+	res.redirect(`/custom/${req.params.id}`);
 });
 
 // // DETAILS

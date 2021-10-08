@@ -1,4 +1,5 @@
 const User = require('../models/User.js')
+const Custom = require('../models/Custom.js')
 
 // check if these are good.
 module.exports = {
@@ -8,13 +9,8 @@ module.exports = {
 	getByEmail: async (email) =>
 		await User.findOne({ email }).lean(),
 
-	// buy: async (userId, itemId) => {
-	// 	const user = await User.findById(userId)
-
-	// 	user.offersBought.push(itemId)
-
-	// 	await user.save()
-	// },
+	trips: async (userId) => 
+		 await Custom.find({ 'creator': userId }).lean(),	
 
 	update: async (_id, updated) =>
 		await User.findByIdAndUpdate(_id, updated),

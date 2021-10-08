@@ -8,13 +8,13 @@ module.exports = {
 	getByIdPopulated: async id => await Custom.findById(id).populate('creator').populate('buddies').lean(),
 	deleteById: async id => await Custom.findByIdAndDelete(id),
 	updateById: async (id, updated) => await Custom.findByIdAndUpdate(id, updated, { runValidators: true }),
-// 	buy: async (userId, itemId) => {
-// 		const item = await Custom.findById(itemId)
+	join: async (tripId, user) => {
+		const trip = await Custom.findById(tripId)
 
-// 		item.buyers.push(userId)
+		trip.buddies.push(user)
 
-// 		await item.save()
-// 	},
+		await trip.save()
+	},
 // 	getAllSortedBuyers: async (type) =>
 // 		await Custom.find({}).sort({ 'buyers': type }).lean(),
 }

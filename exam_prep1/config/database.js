@@ -7,7 +7,9 @@ module.exports = (app) => new Promise((resolve, reject) => {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useCreateIndex: true,
-		autoIndex: false
+		autoIndex: false,
+		useFindAndModify: false,
+		
 	})
 
 	const db = mongoose.connection
