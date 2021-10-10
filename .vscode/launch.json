@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"command": "cd examRealEstate && npm start",
+			"command": "cd examBookingUni && npm start",
 			"name": "Run npm start",
 			"request": "launch",
 			"type": "node-terminal"

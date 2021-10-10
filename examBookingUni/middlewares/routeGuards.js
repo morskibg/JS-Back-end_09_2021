@@ -4,11 +4,11 @@ module.exports = {
 	ownerOnly: async (req, res, next) => {
 		const custom = await req.dbServices.custom.getById(req.params.id)
 
-		custom.creator.equals(req.user._id) ? next() : res.redirect('/')
+		custom.owner.equals(req.user._id) ? next() : res.redirect('/')
 	},
 	notOwnerOnly: async (req, res, next) => {
 		const custom = await req.dbServices.custom.getById(req.params.id)
 
-		!custom.creator.equals(req.user._id) ? next() : res.redirect('/')
+		!custom.owner.equals(req.user._id) ? next() : res.redirect('/')
 	},
 }

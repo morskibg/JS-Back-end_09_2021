@@ -1,0 +1,44 @@
+<section id="viewCatalog" class="background-img">
+    
+    <div class="added-hotels">
+        {{!-- {{#if user}}
+            {{#each customs}}         
+            <a href="/custom/details/{{_id}}" class="added-hotel">        
+            <img src="{{imageUrl}}" alt="" class="picture-added-hotel">
+            <h3>{{name}}</h3>
+            <span>Free rooms: {{freeRooms}}</span>
+            </a> 
+            {{else}}
+            <div class="guest">
+                There are no Hotels found...
+            </div>
+            {{/each}}  
+        {{else}}
+            {{#each customs}}
+            <a href="/user/login" class="added-hotel">
+            <img src="{{imageUrl}}" alt="" class="picture-added-hotel">
+            <h3>{{name}}</h3>
+            <span>Free rooms: {{freeRooms}}</span>
+            </a>  
+            {{else}}
+            <div class="guest">
+                There are no Hotels found...
+            </div> 
+            {{/each}}  
+        {{/if}} --}}
+       {{#each customs}}         
+            <a href="/custom/details/{{_id}}" class="added-hotel">        
+            <img src="{{imageUrl}}" alt="" class="picture-added-hotel">
+            <h3>{{name}}</h3>
+            <span>Free rooms: {{freeRooms}}</span>
+            </a> 
+            {{else}}
+            <div class="guest">
+                There are no Hotels found...
+            </div>
+        {{/each}}   
+    </div>
+</section>
+        
+
+

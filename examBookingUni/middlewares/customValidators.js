@@ -6,17 +6,15 @@ const doPasswordsMatch = (value, req) => {
 	return true
 }
 
-// midleware to check for registered user in db
+const isRegisteredUser = async (value, req) => {
 
-// const isRegisteredUser = async (value, req) => {
+	const user = await req.dbServices.user.getByUsername(value)
+	if (!user) {
+		throw new Error('User is not registered!')
+	}
 
-// 	const user = await req.dbServices.user.getByUsername(value)
-// 	if (!user) {
-// 		throw new Error('User is not registered!')
-// 	}
-
-// 	return true
-// }
+	return true
+}
 
 const isUsernameTaken = async (username, req) => {
 	const existingUsername = await req.dbServices.user.getByUsername(username)
@@ -34,7 +32,7 @@ const isEmailTaken = async (email, req) => {
 		: Promise.resolve('Email does not exist!')
 }
 
-const isRegisteredUser = async (email, req) => {
+const isRegisteredUser_ = async (email, req) => {
 	const user = await req.dbServices.user.getByEmail(email)
 
 	return user
