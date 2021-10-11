@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 // change the connect string ->
 module.exports = (app) => new Promise((resolve, reject) => {
-	mongoose.connect('mongodb://localhost:27017/bookingUni', {
+	mongoose.connect('mongodb+srv://admin:091276@freecluster.o4maq.mongodb.net/bookingUni', {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		autoIndex: true,

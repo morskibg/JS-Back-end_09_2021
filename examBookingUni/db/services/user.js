@@ -15,12 +15,20 @@ module.exports = {
 		await User.findByIdAndUpdate(_id, updated),
 
 	getById: async (_id) =>
-		await User.findById(_id).populate('tripsHistory').lean(),
+		await User.findById(_id).populate('bookedHotels').lean(),
 
 	addHotel: async (hotelId, userId) => {
 		const user = await User.findOne({ _id: userId });
 		
 		user.offeredHotels.push(hotelId);
+
+		await user.save();
+	},
+
+	addBooked: async (hotelId, userId) => {
+		const user = await User.findOne({ _id: userId });
+		
+		user.bookedHotels.push(hotelId);
 
 		await user.save();
 	},

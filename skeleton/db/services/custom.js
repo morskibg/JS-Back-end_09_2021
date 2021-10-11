@@ -9,4 +9,16 @@ module.exports = {
 	deleteById: async id => await Custom.findByIdAndDelete(id),
 	updateById: async (id, updated) => await Custom.findByIdAndUpdate(id, updated, { runValidators: true }),
 	// ADD CUSTOMS SERVICES
+
+	///// get all with search query	
+	// getAll: async (query) => {
+	// 	let custom = await Custom.find({}).lean();
+	// 	if (query.search) {
+	// 		custom = custom.filter((x) => x.title.toLowerCase().includes(query.search));      
+	// 	}		
+	// 	return custom
+	// }
+
+	///// get populated with prop name
+	// getByIdPopulatedMod: async (id,propName) => await Custom.findById(id).populate(propName).lean(),
 }

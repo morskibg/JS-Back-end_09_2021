@@ -22,9 +22,15 @@ const register = async (req, res, next) => {
 				hashedPassword,
 			}
 
-			await req.dbServices.user.createNew(newUser)
+			try {
+				await req.dbServices.user.createNew(newUser)
+				next()				
+			} catch (error) {
+				res.locals.errors = createErrorMsg(error);
+		    res.render('user pages/register', req.body);
+			}			
 
-			next()
+			// next()
 		} else {
 			res.locals.errors = 'Existing user!'
 

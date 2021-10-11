@@ -32,6 +32,16 @@ const isEmailTaken = async (email, req) => {
 		: Promise.resolve('Email does not exist!')
 }
 
+const isValidEmail = async (email, req) => {
+	// const existingEmail = await req.dbServices.user.getByEmail(email)
+	const pattern = /^[A-Za-z0-9.@]+$/
+	const t = pattern.test(email)
+  console.log("🚀 ~ file: customValidators.js ~ line 39 ~ isValidEmail ~ t", t)
+	return pattern.test(email)
+		? Promise.resolve('Email is ok!')
+		: Promise.reject('Email is gaden!')
+}
+
 const isRegisteredUser_ = async (email, req) => {
 	const user = await req.dbServices.user.getByEmail(email)
 
@@ -40,12 +50,15 @@ const isRegisteredUser_ = async (email, req) => {
 		: Promise.resolve('User is not registered!')
 }
 
+
+
 module.exports = (req, res, next) => {
 	req.customValidators = {
 		doPasswordsMatch,
 		isUsernameTaken,
 		isEmailTaken,
 		isRegisteredUser,
+		isValidEmail,
 	}
 
 	next()

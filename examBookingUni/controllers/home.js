@@ -2,9 +2,12 @@ const router = require("express").Router()
 
 router.get("/", async (req, res) => {
 	let customs = await req.dbServices.custom.getAll();
-  customs = customs.sort((a,b) => (a.freeRooms > b.freeRooms) ? 1 : ((b.freeRooms > a.freeRooms) ? -1 : 0));
-	customs.reverse()
-	res.render("home pages/home", { customs } )
+	customs.forEach(element => {
+		element.calcRooms = element.freeRooms - element.bookers.length;
+	});
+  customs = customs.sort((a,b) => (a.calcRooms > b.calcRooms) ? 1 : ((b.calcRooms > a.calcRooms) ? -1 : 0));
+	customs.reverse();
+	res.render("home pages/home", { customs } );
 })
 
 module.exports = router

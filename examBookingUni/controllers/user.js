@@ -4,7 +4,7 @@ const router = require("express").Router()
 const { TOKEN_SECRET, COOKIE_NAME } = require("../config/variables.js")
 const { guestsOnly, usersOnly } = require("../middlewares/routeGuards.js")
 const { body, validationResult } = require("express-validator")
-const { createErrorMsg } = require("../helpers/helper")
+const { createErrorMsg, createErrorFromModel } = require("../helpers/helper")
 
 const register = async (req, res, next) => {
 	const errors = validationResult(req)
@@ -22,14 +22,18 @@ const register = async (req, res, next) => {
 				bookedHotels: [],
 				offeredHotels: [],
 			}
+			try {
+				await req.dbServices.user.createNew(newUser)
+				next()				
+			} catch (error) {
+				res.locals.errors = createErrorMsg(error);
+		    res.render('user pages/register', req.body);
+			}
 
-			await req.dbServices.user.createNew(newUser)
-
-			next()
 		} else {
 			res.locals.errors = 'Existing user!'
 
-			res.render("user pages/login", req.body)
+			res.render("user pages/register", req.body)
 		}
 	} else {
 		res.locals.errors = createErrorMsg(errors)
@@ -79,12 +83,16 @@ router.post(
 	body('email')
 		.isEmail()
 		.withMessage('Must be a valid Email')
-		,
+		.custom((value, { req }) => req.customValidators.isEmailTaken(value, req))
+		.withMessage("Email already taken !!! ")
+		.custom((value, { req }) => req.customValidators.isValidEmail(value, req))
+		.withMessage("Email is gaden !!! "),
 	body('username')		
 		.escape()
 		.trim()
 		.exists({checkFalsy: true})
-		,
+		.custom((value, { req }) => req.customValidators.isUsernameTaken(value, req))
+		.withMessage("Username already taken !!! "),		
 	body("password")
 		.isLength({ min: 5 })
 		.withMessage('Password must be at least 5 symbols!')
@@ -126,8 +134,8 @@ router.get(
 
 router.get('/profile', usersOnly, async (req, res) => {
 	const populatedUser = await req.dbServices.user.getById(req.user._id)
-
-	res.render('profile', populatedUser)
+	const hotels = populatedUser.bookedHotels.map(x=>x.name).join(', ')
+	res.render('user pages/profile', {...populatedUser, hotelsArr: hotels})
 })
 
 module.exports = router

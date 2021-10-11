@@ -13,13 +13,13 @@
                 {{city}}
             </div>
             {{#if freeRooms}}
-                <p><span >Free rooms: {{freeRooms}}</span> </p>
+                <p><span >Free rooms: {{calcFreeRooms}}</span> </p>
             {{else}}
                 <p><span >Free rooms: None</span> </p>
             {{/if}}
             {{#if isOwn}}
-                <a href="" class="edit">Edit</a>
-                <a href="" class="remove">Delete</a>
+                <a href="/custom/edit/{{_id}}" class="edit">Edit</a>
+                <a href="/custom/delete/{{_id}}" class="remove">Delete</a>
             {{else}}
                 {{#if alreadyBooked}}
                     <p><span class="green">You already have booked a room</span> </p>
