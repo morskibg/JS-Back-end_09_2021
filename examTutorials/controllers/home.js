@@ -2,6 +2,7 @@ const router = require("express").Router()
 
 router.get("/", async (req, res) => {
 	let customs = await req.dbServices.custom.getAll(req.query);
+	let view = "user-home"
 	
 	if(!req.user){
 		customs = customs
@@ -12,8 +13,9 @@ router.get("/", async (req, res) => {
 		customs.forEach(element => {
 			element.usersCount = element.users.length;
 		});
+		view = "guest-home"
 	} 
-	res.render("home", { customs })})
+	res.render(view, { customs })})
 
 module.exports = router
 
