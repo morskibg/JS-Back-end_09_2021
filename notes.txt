@@ -1,0 +1,7 @@
+- in middleware/routguards ownerOnly and notOwnerOnly MUST specify propname (owner, creator ...)
+
+#########################  SWIKI  ##########################################################
+1) unique - username
+2) bonus - search in "titte"
+3) implemented sort articles(customs) by date and limit return records with mongoose query
+4) description is limited to 50 words

@@ -1,0 +1,17 @@
+<section>
+    {{#if searchWord}}
+    <h2>Search result for: "{{ searchWord }}"</h2>
+    {{else}}
+    <h2>All articles</h2>    
+    {{/if}}
+    <div class="spacer">
+        <ul>
+            {{#each articles}}
+            <li>
+                <a href="/custom/details/{{_id}}">{{title}}</a>
+            </li>
+           {{/each}}
+        </ul>
+    </div>
+</section>
+

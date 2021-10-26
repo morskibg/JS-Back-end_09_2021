@@ -36,6 +36,7 @@ const register = async (req, res, next) => {
 			res.render("user pages/register", req.body)
 		}
 	} else {
+    // console.log("🚀 ~ file: user.js ~ line 40 ~ register ~ errors", errors)
 		res.locals.errors = createErrorMsg(errors)
 
 		res.render("user pages/register", req.body)
@@ -91,6 +92,7 @@ router.post(
 		.escape()
 		.trim()
 		.exists({checkFalsy: true})
+		.withMessage("Username must exist")
 		.custom((value, { req }) => req.customValidators.isUsernameTaken(value, req))
 		.withMessage("Username already taken !!! "),		
 	body("password")

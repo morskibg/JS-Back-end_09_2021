@@ -11,7 +11,7 @@ const processAuth = (req, res, next) => {
 			res.locals.user = userData
 		} catch (e) {
 			res.clearCookie(COOKIE_NAME)
-			res.redirect('/login')
+			res.redirect('user/login')
 
 			return false
 		}
