@@ -1,5 +1,8 @@
-const router = require("express").Router()
+const router = require('express').Router();
 
-router.get("/", async (req, res) => res.render("home"))
+router.get('/', async (req, res) => {
+  const flights = await req.dbServices.custom.getAll();
+  res.render('home', { flights });
+});
 
-module.exports = router
+module.exports = router;

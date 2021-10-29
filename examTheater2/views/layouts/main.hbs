@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Express Exam</title>
+	<link href="/css/style.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+	{{#if user}}
+	<div class="container">
+		<nav>
+			<a>Theater</a>
+			<ul>
+				<li><a href="/">Home </a></li>
+				<li><a href="/user/logout">Logout</a></li>
+			</ul>
+		</nav>
+		{{#if errors}}
+		<section class="notifications error">
+			<p>{{{errors}}}</p>
+		</section>
+		{{/if}}
+		{{{body}}}
+		<footer>
+			<div>© 2020
+				<a href="https://softuni.bg/courses/js-back-end">JS Back-End</a>
+			</div>
+		</footer>
+	</div>
+	{{else}}
+	<nav>
+		<a>Theater</a>
+		<ul>
+			<li><a href="/">Home </a></li>
+			<li><a href="/user/login">Login</a></li>
+			<li><a href="/user/register">Register</a></li>
+		</ul>
+	</nav>
+	{{#if errors}}
+	<section class="notifications error">
+		<p>{{{errors}}}</p>
+	</section>
+	{{/if}}
+	{{{body}}}
+	<footer>
+		<div>© 2020
+			<a href="https://softuni.bg/courses/js-back-end">JS Back-End</a>
+		</div>
+	</footer>
+
+	{{/if}}
+</body>
+
+</html>

@@ -1,33 +1,34 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-	email: { type: String, required: true, unique: true },
-	hashedPassword: { type: String, required: true },
-	gender: { type: String, required: true },
-	tripsHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Trip' }],
-})
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  hashedPassword: { type: String, required: true },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  flightsCreated: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Flight' }],
+});
 
-const User = mongoose.model('User', UserSchema)
+const User = mongoose.model('User', UserSchema);
 
-module.exports = User
+module.exports = User;
 
 // const mongoose = require('mongoose')
 
 // const UserSchema = new mongoose.Schema({
-// 	name: { 
-// 		type: String, 
+// 	name: {
+// 		type: String,
 // 		required: true,
 // 		validate: /^[A-Za-z]+[ ]{1}[A-Za-z]+$/ },
-// 	username: { 
-// 		type: String, 
-// 		required: true, 
+// 	username: {
+// 		type: String,
+// 		required: true,
 // 		minLength: 5,
 // 	 },
-// 	password: { 
-// 		type: String, 
-// 		required: true, 
+// 	password: {
+// 		type: String,
+// 		required: true,
 // 		minLength: 4,
-// 	},	
+// 	},
 // })
 
 // const User = mongoose.model('User', UserSchema)

@@ -1,0 +1,43 @@
+<html lang='en'>
+
+  <head>
+    <meta charset='UTF-8' />
+    <title>Catalog</title>
+    <link rel='stylesheet' href='/css/style.css' />
+  </head>
+
+  <body>
+    <nav>
+      {{#if user}}
+        <div class='left-container'>
+          <ul>
+            <li><a href='/'>Home</a></li>
+            <li><a href=''>Flights</a></li>
+            <li><a href=''>My Tickets</a></li>
+          </ul>
+        </div>
+        <div class='right-container'>
+          <span>Welcome, {{user.name}} </span>
+          <a href='/user/logout' class='log-out'>Logout</a>
+          <a href=''><img src='/img/cart.png' alt='' class='cart' /></a>
+        </div>
+      {{else}}
+        <div class='navigation'>
+          <ul>
+            <li><a href=''>Flights</a></li>
+            <li><a href='/user/login'>Login</a></li>
+            <li><a href='/user/register'>Register</a></li>
+          </ul>
+        </div>
+      {{/if}}
+    </nav>
+    {{#if errors}}
+      <div class='error'>
+        <p class='error'>{{{errors}}}</p>
+      </div>
+    {{/if}}
+    {{{body}}}
+    <footer>SoftUni Airlines</footer>
+  </body>
+
+</html>

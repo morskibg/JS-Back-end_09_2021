@@ -1,0 +1,10 @@
+<section class='flight-details'>
+  <form action='/custom/{{@root._id}}/seats/{{_id}}/book' method="POST" class='seat-form'>
+    <span>{{price}}$</span><span>{{type}}</span>
+    <input type='text' placeholder='Add Number' name="qty" />
+    <input type='submit' class='create-seat' value='Add to Cart' />
+    {{#if @root.user.isAdmin}}
+    <a href='/custom/{{@root._id}}/seats/{{_id}}' class='delete'>X</a>
+    {{/if}}
+  </form>
+</section>

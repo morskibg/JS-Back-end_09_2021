@@ -1,0 +1,26 @@
+<main>
+    <section class="single-ticket">
+        <div class="left-ticket-container">
+            <img src="{{image}}" alt="" class="destination-img">
+            <div class="flight-parameters">
+                <span class="ticket-price">Price: {{price}}$</span>
+                <span class="ticket-class">Class: {{type}}</span>
+            </div>
+        </div>
+        <div class="right-ticket-container">
+            <h2>{{destination}}</h2>
+            <p>from {{origin}}</p>
+            <p>{{date}}</p>
+            <p>{{time}}</p>
+            <div>
+                <span class="number-of-tickets">{{qty}}</span>
+                <a href="" class="remove">REMOVE</a>
+            </div>
+        </div>
+    </section>
+    <section class="ticket-checkout">
+        <div class="total">Sub total: 600$</div>
+        <a href="" class="checkout">Checkout</a>
+    </section>
+
+</main>

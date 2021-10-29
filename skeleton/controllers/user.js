@@ -95,7 +95,7 @@ const login = async (req, res) => {
     res.render('login', req.body);
   }
 };
-
+//.normalizeEmail()
 // "/register",
 // 	guestsOnly,
 // 	body('email')

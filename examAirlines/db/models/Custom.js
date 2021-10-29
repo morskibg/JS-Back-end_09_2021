@@ -1,20 +1,18 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose');
 
 const CustomSchema = new mongoose.Schema({
-	startPoint: { type: String, required: true },
-	endPoint: { type: String, required: true },
-	date: { type: String, required: true },
-	time: { type: String, required: true },
-	carImage: { type: String, required: true },
-	carBrand: { type: String, required: true },
-	seats: { type: Number, required: true },
-	price: { type: Number, required: true },
-	description: { type: String, required: true },
-	creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-	buddies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-})
+  destination: { type: String, required: true },
+  origin: { type: String, required: true },
+  date: { type: Date, required: true },
+  time: { type: String, required: true },
+  image: { type: String, required: true },
+  isPublic: { type: Boolean },
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  bookers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  seats: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Seat' }],
+});
 
 // CHANGE THE NAME
-const Custom = mongoose.model("Trip", CustomSchema)
+const Custom = mongoose.model('Flight', CustomSchema);
 
-module.exports = Custom
+module.exports = Custom;

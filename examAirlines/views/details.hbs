@@ -1,0 +1,38 @@
+{{#if locals.errors}}
+{{{errors}}}
+{{/if}}
+<main>
+    <section class="ticket-area">
+        <div class="ticket-area-left">
+            <img src="{{image}}" alt="">
+        </div>
+        <div class="ticket-area-right">
+            <h3>{{destination}}</h3>
+            <div>from {{origin}}</div>
+            <div class="data-and-time">{{date}} {{time}}</div>
+            {{#if user.isAdmin}}
+                <a href="/custom/edit/{{_id}}" class="edit-flight-detail"></a>
+                {{#if isPublic}}
+                    <a href="/custom/publish/{{_id}}"><button>Hide Flight</button></a>
+                {{else}}
+                    <a href="/custom/publish/{{_id}}"><button>Publish Flight</button></a>
+                {{/if}}
+            {{/if}}
+        </div>
+    </section>
+    {{#if user.isAdmin}}
+        <section class="seat-info">
+            <form action="/custom/{{_id}}/seats" method="POST" class="seat-form">
+                <input type="text" placeholder="Price" name="price" value="{{price}}">
+                <input type="text" placeholder="Type" name="type" value="{{type}}">
+                <input type="number" name="qty" min="1" max="999" placeholder="Tickets Counter" 
+                    value="{{qty}}">
+                <input type="submit" class="create-seat" value="Create Seat">
+            </form>
+        </section>
+    {{/if}}
+    {{#each seats}}
+    {{>seat}}
+    {{/each}}
+
+</main>

@@ -1,0 +1,21 @@
+<main>
+    <form action="" class="catalog-form">
+        <label>Destination:</label>
+        <input type="text" placeholder="Destination">
+        <label>Origin:</label>
+        <input type="text" placeholder="Origin">
+        <label>Departure:</label>
+        <input type="text" placeholder="Departure">
+        <input type="submit" class="search" value="Search">
+        {{#if user.isAdmin}}
+        <a href="/custom/create" class="add-flight">Add Flight +</a>
+        {{/if}}
+    </form>
+
+    <section class="added-flights">
+        {{#each flights}}
+        {{>flight}}
+        {{/each}}
+    </section>
+
+</main>
