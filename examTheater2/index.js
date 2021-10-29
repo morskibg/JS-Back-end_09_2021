@@ -7,7 +7,7 @@ const start = async () => {
 
 	await appConfig(app)
 
-	app.listen(port, () => console.log(`Server listening on port ${port}`))
+	app.listen(port, () => console.log(`Server listening on: http://localhost:${port}`))
 }
 
 start()

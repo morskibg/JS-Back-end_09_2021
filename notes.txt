@@ -8,3 +8,22 @@
 
 #########################  THEATER2  ##########################################################
 1) Sort by likes and time created in JS
+
+##########################   FROM sineasta mongoose queries ###############################
+
+getFirstNbyLikesDesc: async (n) =>
+	await Custom.find({ isPublic: true }).sort({ 'usersLiked': -1 }).slice('usersLiked', n).lean(),
+
+getFirstNByDateDesc: async (n) =>
+	await Custom.find({ isPublic: true }).sort({ 'createdAt': -1 }).slice('createdAt', n).lean(),
+
+
+includesNameInsensitive: async (name) => {
+	const regex = new RegExp(name, 'i')
+
+	return Custom.find({ title: { $regex: regex } }).lean()
+},
+
+getTopNSortedByEnrolled: async (type, n) =>
+	await Custom.find({}).sort({ usersEnrolled: type }).slice('Courses', n).lean(),
+%%%% type ('asc', 'desc')
