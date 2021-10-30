@@ -39,81 +39,64 @@ router.get('/', async (req, res) => {
 // 	body('availablePieces')
 // 		.isInt({ min: 0, max: 10 })
 // 		.withMessage('Available pieces must be from 0 to 10'),
-// body('total')
-// .default(0)
-// .isFloat({ min: 0 })
-// .withMessage('Total should be positive'),
 
 // CREATE
 router.get('/create', usersOnly, (req, res) => res.render('create'));
 //for testing !
-router.post('/create', usersOnly, (req, res) => {
-  console.log(req.body);
-  res.render('create');
-});
-// router.post(
-//   '/create',
-//   usersOnly,
-//   body('startPoint')
-//     .isLength({ min: 4 })
-//     .withMessage('Start Point must be at least 4 symbols long.'),
-//   body('endPoint')
-//     .isLength({ min: 4 })
-//     .withMessage('End Point must be at least 4 symbols long.'),
-//   body('seats')
-//     .isInt({ min: 0, max: 4 })
-//     .withMessage('Seats must be from 0 to 4'),
-//   body('description')
-//     .isLength({ min: 10 })
-//     .withMessage('Description. must be at least 10 symbols'),
-//   body('carImage')
-//     .isURL({ protocols: ['http', 'https'] })
-//     .withMessage('Car Image must be a valid URL'),
-//   body('carBrand')
-//     .isLength({ min: 4 })
-//     .withMessage('Car brand must be at least 4 symbols'),
-//   body('price')
-//     .isInt({ min: 1, max: 50 })
-//     .withMessage('Price must be from 1 to 50'),
-//   async (req, res) => {
-//     const errors = validationResult(req);
+// router.post('/create', usersOnly, (req, res) => {
+//   console.log(req.body);
+//   res.render('create');
+// });
+router.post(
+  '/create',
+  usersOnly,
+  body('merchant')
+    .isLength({ min: 4 })
+    .withMessage('Merchant must be at least 4 symbols long.'),
+  body('total').isFloat({ min: 0 }).withMessage('Total should be positive'),
+  body('category')
+    .custom((value, { req }) =>
+      req.customValidators.isValidCategory(value, req)
+    )
+    .withMessage('Invalid category!'),
+  body('description')
+    .isLength({ min: 3, max: 30 })
+    .withMessage('Description. must be between 3 and 30 symbols'),
 
-//     if (errors.isEmpty()) {
-//       const custom = {
-//         startPoint: req.body.startPoint,
-//         endPoint: req.body.endPoint,
-//         date: req.body.date,
-//         time: req.body.time,
-//         carImage: req.body.carImage,
-//         carBrand: req.body.carBrand,
-//         seats: req.body.seats,
-//         price: req.body.price,
-//         description: req.body.description,
-//         creator: req.user._id,
-//         buddies: [],
-//       };
+  async (req, res) => {
+    const errors = validationResult(req);
 
-//       const trip = await req.dbServices.custom.create(custom);
-//       await req.dbServices.user.addTrip(trip._id, req.user._id);
+    if (errors.isEmpty()) {
+      const custom = {
+        merchant: req.body.merchant,
+        total: req.body.total,
+        category: req.body.category,
+        description: req.body.description,
+        report: req.body.report ? true : false,
+        user: req.user._id,
+        creator: req.user._id,
+      };
 
-//       res.redirect('/custom');
+      const expense = await req.dbServices.custom.create(custom);
 
-//       // adding to catch validation errors in db creation models
-//       // try {
-//       // 	const hotel = await req.dbServices.custom.create(custom);
-//       // 	await req.dbServices.user.addHotel(hotel._id, req.user._id);
-//       // 	res.redirect('/');
-//       // } catch (error) {
-//       // 	res.locals.errors = error.message;
-//       //   res.render('booking pages/create', req.body);
-//       // }
-//     } else {
-//       res.locals.errors = createErrorMsg(errors);
+      res.redirect('/');
 
-//       res.render('create', req.body);
-//     }
-//   }
-// );
+      // adding to catch validation errors in db creation models
+      // try {
+      // 	const hotel = await req.dbServices.custom.create(custom);
+      // 	await req.dbServices.user.addHotel(hotel._id, req.user._id);
+      // 	res.redirect('/');
+      // } catch (error) {
+      // 	res.locals.errors = error.message;
+      //   res.render('booking pages/create', req.body);
+      // }
+    } else {
+      res.locals.errors = createErrorMsg(errors);
+
+      res.render('create', req.body);
+    }
+  }
+);
 
 // DETAILS
 // added guard for users only !!!!!!

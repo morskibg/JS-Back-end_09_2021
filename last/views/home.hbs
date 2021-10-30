@@ -1,0 +1,37 @@
+{{#if user}}
+<section class="actions">
+	<form action="">
+		<h2>Salary time? Refill your account amount.</h2>
+		<input type="text" id="refill-amount">
+		<button type="submit">Refill</button>
+	</form>
+	<div>
+		<h2>New expense comming up?</h2>
+		<a href="/custom/create">Add it now</a>
+	</div>
+</section>
+
+<hr class="separator">
+
+{{#each expenses}}
+<table class="expenses">
+	<thead>
+		<tr>
+			<th>Merchant</th>
+			<th>Amount</th>
+			<th>Category</th>
+			<th>Description</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		{{>expense}}
+	</tbody>
+</table>
+{{else}}
+<h1 class="no-expenses">No expenses founded so far.. <span>GOOD JOB!</span></h1>
+{{/each}}
+{{else}}
+<p class="guest-message">MoneyGone? The best expense tracker tool of all time!<br>Аre you new here? <a
+		href="/user/register">Register</a> yourself!</p>
+{{/if}}
